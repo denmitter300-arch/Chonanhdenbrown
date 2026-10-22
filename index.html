@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#176b45">
+  <title>DENBROWN · Photo Selection</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#" id="brandHome" aria-label="DENBROWN trang chủ">
+    <span class="brand-mark" aria-hidden="true">▧</span>
+    <span class="brand-name">DENBROWN<small>PHOTO SELECTION</small></span>
+  </a>
+  <div class="top-actions">
+    <span class="avatar">D</span>
+    <button class="icon-button" id="menuButton" aria-label="Mở menu">☰</button>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Điều hướng">
+  <button class="tab active" data-view="create">Tạo album</button>
+  <button class="tab" data-view="albums">Album của tôi <span class="count-pill" id="albumCount">0</span></button>
+  <button class="tab" id="helpButton">Hướng dẫn ↗</button>
+</nav>
+
+<main class="container">
+  <section id="createView">
+    <div class="hero">
+      <p class="eyebrow">DENBROWN PHOTO SELECTION</p>
+      <h1>Mỗi khoảnh khắc.<br><span>Một lựa chọn yêu thích.</span></h1>
+      <p class="hero-copy">Tạo album riêng và chọn những bức ảnh bạn yêu thích. Gọn gàng, dễ sử dụng, ở bất cứ đâu.</p>
+    </div>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <span class="heading-icon">＋</span>
+        <div><h2>Tạo album chọn ảnh</h2><p>Bắt đầu một bộ sưu tập mới của bạn</p></div>
+      </div>
+      <form id="createForm" class="form">
+        <div class="field">
+          <label for="albumName">Tên album <b>*</b></label>
+          <input id="albumName" name="albumName" type="text" maxlength="100" required placeholder="▧  Ví dụ: Wedding · Minh & An">
+        </div>
+        <div class="field">
+          <div class="label-row"><label for="driveLink">Link thư mục Google Drive</label><button class="text-button" type="button" id="driveHelp">Hướng dẫn ⓘ</button></div>
+          <input id="driveLink" name="driveLink" type="url" placeholder="🔺  https://drive.google.com/drive/folders/...">
+          <p class="hint">Tự đọc ảnh từ thư mục công khai chưa được bật trong bản mã nguồn này. Đặt quyền Drive “Bất kỳ ai có đường liên kết: Người xem”.</p>
+        </div>
+        <div class="field">
+          <label for="selectionLimit">Giới hạn số ảnh khách được chọn</label>
+          <input id="selectionLimit" type="number" min="1" max="1000" value="30">
+          <p class="hint">Khách chỉ có thể chọn tối đa số ảnh đã đặt.</p>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-icon">⇩</span>
+          <span class="toggle-copy"><strong>Cho phép tải ảnh</strong><small>Hiện nút tải ảnh gốc trong album</small></span>
+          <label class="switch" aria-label="Cho phép tải ảnh"><input id="allowDownload" type="checkbox" checked><span></span></label>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-icon">✓</span>
+          <span class="toggle-copy"><strong>Cho phép chọn ảnh</strong><small>Bật/tắt khả năng chọn ảnh trong album</small></span>
+          <label class="switch" aria-label="Cho phép chọn ảnh"><input id="allowSelection" type="checkbox" checked><span></span></label>
+        </div>
+        <button class="primary-button submit-button" type="submit">＋ Tạo album chọn ảnh</button>
+      </form>
+    </section>
+    <div class="notice"><span>ⓘ</span><p><strong>Lưu ý bản demo:</strong> dữ liệu lưu trong trình duyệt trên thiết bị hiện tại. Chưa có tài khoản khách, đồng bộ trực tuyến hoặc phân quyền máy chủ.</p></div>
+  </section>
+
+  <section id="albumsView" class="hidden">
+    <div class="section-heading"><div><p class="eyebrow">BỘ SƯU TẬP CỦA BẠN</p><h1>Album của tôi</h1></div><button class="primary-button" id="newAlbumButton">＋ Tạo album</button></div>
+    <div id="albumList" class="album-grid"></div>
+    <div id="noAlbums" class="empty-state">Bạn chưa có album nào. Tạo album đầu tiên để bắt đầu.</div>
+  </section>
+
+  <section id="detailView" class="hidden">
+    <button class="back-button" id="backToAlbums">← Album của tôi</button>
+    <div class="detail-heading"><div><p class="eyebrow">ALBUM CHỌN ẢNH</p><h1 id="detailTitle">Album</h1><p id="detailDescription"></p></div><button class="secondary-button" id="editAlbumButton">Sửa cài đặt</button></div>
+    <div class="upload-panel">
+      <div><strong>Thêm ảnh vào album</strong><p>Chọn ảnh từ thư viện trên điện thoại hoặc máy tính.</p></div>
+      <label class="primary-button upload-button" for="photoFiles">＋ Thêm ảnh<input id="photoFiles" type="file" accept="image/*" multiple hidden></label>
+    </div>
+    <div class="gallery-toolbar">
+      <span id="selectedCount">Đã chọn 0 ảnh</span>
+      <div class="toolbar-actions"><button class="secondary-button" id="exportCsv">Xuất danh sách CSV</button><button class="secondary-button" id="downloadChosen">Tải ảnh đã chọn</button></div>
+    </div>
+    <div id="photoGrid" class="photo-grid"></div>
+    <div id="noPhotos" class="empty-state">Album chưa có ảnh. Nhấn “Thêm ảnh” để bắt đầu.</div>
+    <div class="detail-footer"><button class="danger-button" id="deleteAlbumButton">Xóa album</button><p>Danh sách chọn được lưu trên trình duyệt của thiết bị này.</p></div>
+  </section>
+</main>
+
+<dialog id="editDialog" class="dialog">
+  <form id="editForm" method="dialog">
+    <div class="dialog-heading"><h2>Cài đặt album</h2><button class="icon-button" type="button" id="closeDialog">×</button></div>
+    <label for="editName">Tên album</label><input id="editName" type="text" maxlength="100" required>
+    <label for="editDrive">Link Google Drive</label><input id="editDrive" type="url" placeholder="https://drive.google.com/drive/folders/...">
+    <label for="editLimit">Giới hạn chọn ảnh</label><input id="editLimit" type="number" min="1" max="1000" required>
+    <label class="check-line"><input id="editAllowDownload" type="checkbox"> Cho phép tải ảnh</label>
+    <label class="check-line"><input id="editAllowSelection" type="checkbox"> Cho phép chọn ảnh</label>
+    <button class="primary-button" type="submit">Lưu thay đổi</button>
+  </form>
+</dialog>
+
+<footer>DENBROWN PHOTO SELECTION <span>·</span> Chọn những khoảnh khắc đáng nhớ</footer>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>
