@@ -22,6 +22,17 @@ Giao diện mới theo mẫu DENBROWN: nền trắng, tông xanh lá, bố cục
 ## Deploy
 Repository triển khai qua GitHub Pages. Mỗi commit trên nhánh `main` sẽ kích hoạt workflow Pages nếu GitHub Pages đã bật nguồn **GitHub Actions** trong Settings → Pages.
 
+
+### Sửa lỗi tải ảnh Google Drive trên iPhone (CORS)
+Ảnh Drive cần đi qua Edge Function để trình duyệt có quyền tải và đóng gói ZIP:
+1. Trong Supabase Dashboard, mở **Edge Functions** → **Deploy a new function**.
+2. Tạo function tên chính xác: `drive-image`.
+3. Dán mã từ [supabase/functions/drive-image/index.ts](https://github.com/denmitter300-arch/Chonanhdenbrown/blob/main/supabase/functions/drive-image/index.ts) vào trình soạn thảo và Deploy.
+4. Mở **Function Settings** của `drive-image`, tắt xác thực JWT / bật **Verify JWT = OFF** (function chỉ trả ảnh có ID Drive công khai).
+5. Tải lại website và thử tải ảnh đã thả tim.
+
+Website đã được cập nhật để dùng endpoint này cho ảnh có nguồn Google Drive. Ảnh tải trực tiếp lên Supabase vẫn tải như trước. Function chỉ hoạt động sau khi được deploy trong Supabase.
+
 ## Lưu ý
 - Album khách không có mật khẩu; link riêng là cách truy cập album.
 - Mật khẩu đăng nhập chỉ dành cho khu vực quản trị studio.
