@@ -118,10 +118,7 @@ $('refresh').onclick=loadAlbums;$('albums').onclick=async e=>{
    if(pr.error)throw pr.error;
    const paths=(pr.data||[]).map(p=>p.storage_path).filter(p=>p&&!p.startsWith('drive:'));
    for(let i=0;i<paths.length;i+=100){const rm=await db.storage.from('denbrown-photos').remove(paths.slice(i,i+100));if(rm.error)throw rm.error}
-   for(const table of ['denbrown_selections','denbrown_album_notes','denbrown_photos']){
-    const del=await db.from(table).delete().eq('album_id',a.id);
-    if(del.error)throw del.error;
-   }
+   // Xóa album sẽ tự xóa selections, notes và photo rows nhờ ON DELETE CASCADE.
    const delAlbum=await db.from('denbrown_albums').delete().eq('id',a.id);
    if(delAlbum.error)throw delAlbum.error;
    if(album?.id===a.id){album=null;$('editor').classList.add('hidden')}
