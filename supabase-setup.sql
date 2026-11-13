@@ -68,3 +68,11 @@ begin
 end; $$;
 drop trigger if exists denbrown_selection_limit on public.denbrown_selections;
 create trigger denbrown_selection_limit before insert on public.denbrown_selections for each row execute function public.enforce_denbrown_selection_limit();
+
+-- Remove password protection and Google Drive API configuration as requested.
+drop policy if exists "album public read" on public.denbrown_albums;
+drop function if exists public.get_public_album(text,text);
+alter table public.denbrown_albums drop column if exists password_hash;
+alter table public.denbrown_albums drop column if exists drive_folder_url;
+create policy "album public read" on public.denbrown_albums for select to anon,authenticated
+ using ((status='active' and expires_at>now()) or owner_id=auth.uid());
