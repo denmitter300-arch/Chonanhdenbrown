@@ -1,111 +1,38 @@
 <!doctype html>
-<html lang="vi">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#176b45">
-  <title>DENBROWN · Photo Selection</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header class="topbar">
-  <a class="brand" href="#" id="brandHome" aria-label="DENBROWN trang chủ">
-    <span class="brand-mark" aria-hidden="true">▧</span>
-    <span class="brand-name">DENBROWN<small>PHOTO SELECTION</small></span>
-  </a>
-  <div class="top-actions">
-    <span class="avatar">D</span>
-    <button class="icon-button" id="menuButton" aria-label="Mở menu">☰</button>
-  </div>
-</header>
-
-<nav class="tabs" aria-label="Điều hướng">
-  <button class="tab active" data-view="create">Tạo album</button>
-  <button class="tab" data-view="albums">Album của tôi <span class="count-pill" id="albumCount">0</span></button>
-  <button class="tab" id="helpButton">Hướng dẫn ↗</button>
-</nav>
-
-<main class="container">
-  <section id="createView">
-    <div class="hero">
-      <p class="eyebrow">DENBROWN PHOTO SELECTION</p>
-      <h1>Mỗi khoảnh khắc.<br><span>Một lựa chọn yêu thích.</span></h1>
-      <p class="hero-copy">Tạo album riêng và chọn những bức ảnh bạn yêu thích. Gọn gàng, dễ sử dụng, ở bất cứ đâu.</p>
-    </div>
-
-    <section class="panel">
-      <div class="panel-heading">
-        <span class="heading-icon">＋</span>
-        <div><h2>Tạo album chọn ảnh</h2><p>Bắt đầu một bộ sưu tập mới của bạn</p></div>
-      </div>
-      <form id="createForm" class="form">
-        <div class="field">
-          <label for="albumName">Tên album <b>*</b></label>
-          <input id="albumName" name="albumName" type="text" maxlength="100" required placeholder="▧  Ví dụ: Wedding · Minh & An">
-        </div>
-        <div class="field">
-          <div class="label-row"><label for="driveLink">Link thư mục Google Drive</label><button class="text-button" type="button" id="driveHelp">Hướng dẫn ⓘ</button></div>
-          <input id="driveLink" name="driveLink" type="url" placeholder="🔺  https://drive.google.com/drive/folders/...">
-          <p class="hint">Tự đọc ảnh từ thư mục công khai chưa được bật trong bản mã nguồn này. Đặt quyền Drive “Bất kỳ ai có đường liên kết: Người xem”.</p>
-        </div>
-        <div class="field">
-          <label for="selectionLimit">Giới hạn số ảnh khách được chọn</label>
-          <input id="selectionLimit" type="number" min="1" max="1000" value="30">
-          <p class="hint">Khách chỉ có thể chọn tối đa số ảnh đã đặt.</p>
-        </div>
-        <div class="toggle-row">
-          <span class="toggle-icon">⇩</span>
-          <span class="toggle-copy"><strong>Cho phép tải ảnh</strong><small>Hiện nút tải ảnh gốc trong album</small></span>
-          <label class="switch" aria-label="Cho phép tải ảnh"><input id="allowDownload" type="checkbox" checked><span></span></label>
-        </div>
-        <div class="toggle-row">
-          <span class="toggle-icon">✓</span>
-          <span class="toggle-copy"><strong>Cho phép chọn ảnh</strong><small>Bật/tắt khả năng chọn ảnh trong album</small></span>
-          <label class="switch" aria-label="Cho phép chọn ảnh"><input id="allowSelection" type="checkbox" checked><span></span></label>
-        </div>
-        <button class="primary-button submit-button" type="submit">＋ Tạo album chọn ảnh</button>
-      </form>
-    </section>
-    <div class="notice"><span>ⓘ</span><p><strong>Lưu ý bản demo:</strong> dữ liệu lưu trong trình duyệt trên thiết bị hiện tại. Chưa có tài khoản khách, đồng bộ trực tuyến hoặc phân quyền máy chủ.</p></div>
-  </section>
-
-  <section id="albumsView" class="hidden">
-    <div class="section-heading"><div><p class="eyebrow">BỘ SƯU TẬP CỦA BẠN</p><h1>Album của tôi</h1></div><button class="primary-button" id="newAlbumButton">＋ Tạo album</button></div>
-    <div id="albumList" class="album-grid"></div>
-    <div id="noAlbums" class="empty-state">Bạn chưa có album nào. Tạo album đầu tiên để bắt đầu.</div>
-  </section>
-
-  <section id="detailView" class="hidden">
-    <button class="back-button" id="backToAlbums">← Album của tôi</button>
-    <div class="detail-heading"><div><p class="eyebrow">ALBUM CHỌN ẢNH</p><h1 id="detailTitle">Album</h1><p id="detailDescription"></p></div><button class="secondary-button" id="editAlbumButton">Sửa cài đặt</button></div>
-    <div class="upload-panel">
-      <div><strong>Thêm ảnh vào album</strong><p>Chọn ảnh từ thư viện trên điện thoại hoặc máy tính.</p></div>
-      <label class="primary-button upload-button" for="photoFiles">＋ Thêm ảnh<input id="photoFiles" type="file" accept="image/*" multiple hidden></label>
-    </div>
-    <div class="gallery-toolbar">
-      <span id="selectedCount">Đã chọn 0 ảnh</span>
-      <div class="toolbar-actions"><button class="secondary-button" id="exportCsv">Xuất danh sách CSV</button><button class="secondary-button" id="downloadChosen">Tải ảnh đã chọn</button></div>
-    </div>
-    <div id="photoGrid" class="photo-grid"></div>
-    <div id="noPhotos" class="empty-state">Album chưa có ảnh. Nhấn “Thêm ảnh” để bắt đầu.</div>
-    <div class="detail-footer"><button class="danger-button" id="deleteAlbumButton">Xóa album</button><p>Danh sách chọn được lưu trên trình duyệt của thiết bị này.</p></div>
-  </section>
-</main>
-
-<dialog id="editDialog" class="dialog">
-  <form id="editForm" method="dialog">
-    <div class="dialog-heading"><h2>Cài đặt album</h2><button class="icon-button" type="button" id="closeDialog">×</button></div>
-    <label for="editName">Tên album</label><input id="editName" type="text" maxlength="100" required>
-    <label for="editDrive">Link Google Drive</label><input id="editDrive" type="url" placeholder="https://drive.google.com/drive/folders/...">
-    <label for="editLimit">Giới hạn chọn ảnh</label><input id="editLimit" type="number" min="1" max="1000" required>
-    <label class="check-line"><input id="editAllowDownload" type="checkbox"> Cho phép tải ảnh</label>
-    <label class="check-line"><input id="editAllowSelection" type="checkbox"> Cho phép chọn ảnh</label>
-    <button class="primary-button" type="submit">Lưu thay đổi</button>
-  </form>
-</dialog>
-
-<footer>DENBROWN PHOTO SELECTION <span>·</span> Chọn những khoảnh khắc đáng nhớ</footer>
-<div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script src="app.js"></script>
-</body>
-</html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#171512"><title>DENBROWN PHOTO SELECTION</title>
+<style>
+:root{--bg:#11110f;--p:#1b1a17;--p2:#25231f;--t:#f5f0e7;--m:#aaa397;--l:#39362f;--g:#c9a96e;--g2:#e4c58b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font:15px/1.5 system-ui,-apple-system,sans-serif}button,input,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 14px;background:var(--g);color:#171512;font-weight:700;cursor:pointer}button.alt{background:var(--p2);color:var(--t);border:1px solid var(--l)}button:disabled{opacity:.5}header{position:sticky;top:0;background:#11110fee;border-bottom:1px solid var(--l);z-index:3}.top,main{max-width:1150px;margin:auto;padding:14px 18px}.top{display:flex;justify-content:space-between;align-items:center}.brand{font-weight:800;letter-spacing:.18em;color:var(--g2)}.brand small{display:block;font-size:10px;color:var(--m)}h1{font-size:clamp(28px,5vw,44px);line-height:1.12;margin:10px 0}.muted,.status{color:var(--m)}.card{background:var(--p);border:1px solid var(--l);border-radius:15px;padding:17px;margin:14px 0}.field{display:grid;gap:5px;margin:10px 0;flex:1}.field label{font-size:12px;color:var(--m)}input,textarea{width:100%;padding:11px;border:1px solid var(--l);border-radius:9px;background:#111;color:var(--t)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.grow{flex:1}.hidden{display:none!important}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}.photo{border:1px solid var(--l);border-radius:12px;overflow:hidden;background:#080808}.photo img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}.meta{padding:8px;display:flex;align-items:center;justify-content:space-between;gap:6px}.heart{border-radius:50%;padding:0;width:38px;height:38px;background:#322a25;color:white;font-size:20px}.heart.on{background:#733a36}.pill{border:1px solid var(--l);border-radius:30px;padding:5px 10px;color:var(--m);font-size:12px}.album{padding:12px 0;border-bottom:1px solid var(--l);display:flex;gap:10px;justify-content:space-between;align-items:center}.notice{padding:12px;border:1px solid #765c37;background:#33291b;color:#f2d9ac;border-radius:10px;margin:12px 0}.toolbar{position:sticky;bottom:8px;background:#1b1a17f2;border:1px solid var(--l);padding:12px;border-radius:13px;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:15px}.small{font-size:12px}.status{min-height:20px;font-size:12px}.empty{padding:35px;text-align:center;color:var(--m)}.foot{text-align:center;color:var(--m);font-size:12px;padding:28px}
+@media(max-width:600px){.top,main{padding:12px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.card{padding:13px}.toolbar{bottom:6px}.album{align-items:flex-start}}
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script></head>
+<body><header><div class="top"><div class="brand">DENBROWN<small>PHOTO SELECTION</small></div><div class="row"><span id="conn" class="pill">Đang kết nối</span><button id="adminToggle" class="alt">Quản trị</button></div></div></header>
+<main><section id="publicView"><p style="color:var(--g);letter-spacing:.2em;font-size:11px">A PRIVATE PHOTO EXPERIENCE</p><h1>Mỗi khoảnh khắc<br><span style="color:var(--g2)">một lựa chọn yêu thích.</span></h1><p class="muted">Xem ảnh, thả tim và chọn những khoảnh khắc bạn muốn lưu giữ.</p><div id="welcome" class="card">Hãy mở đường link album riêng do studio gửi cho bạn.</div><div id="albumPublic" class="hidden"><h2 id="pubTitle"></h2><p id="pubNote" class="muted small"></p><div id="expiry"></div><div class="toolbar"><b id="count">0 ảnh đã chọn</b><button id="download">Tải ảnh đã chọn</button></div><div id="pubPhotos" class="grid" style="margin-top:14px"></div></div></section>
+<section id="adminView" class="hidden"><p style="color:var(--g);letter-spacing:.2em;font-size:11px">STUDIO CONTROL</p><h1>Quản lý album</h1><div id="login" class="card" style="max-width:440px"><h2>Đăng nhập quản trị</h2><div class="field"><label>Email</label><input id="email" type="email"></div><div class="field"><label>Mật khẩu</label><input id="pass" type="password"></div><button id="loginBtn">Đăng nhập</button><div id="loginMsg" class="status"></div></div><div id="dash" class="hidden"><div class="row" style="justify-content:space-between"><span id="who" class="muted small"></span><button id="logout" class="alt">Đăng xuất</button></div><div class="card"><h2>+ Tạo album</h2><div class="row"><div class="field grow"><label>Tên album / khách hàng</label><input id="title" placeholder="Tên khách hàng"></div><div class="field"><label>Thời hạn ngày</label><input id="days" type="number" value="30" min="1" max="365" style="width:100px"></div></div><div class="field"><label>Lời nhắn cho khách</label><textarea id="note"></textarea></div><button id="create">Tạo album</button><div id="createMsg" class="status"></div></div><div class="card"><div class="row" style="justify-content:space-between"><h2>Danh sách album</h2><button id="refresh" class="alt">Làm mới</button></div><div id="albums"></div></div><div id="editor" class="card hidden"><div class="row" style="justify-content:space-between"><h2 id="editTitle"></h2><button id="close" class="alt">Đóng</button></div><div class="row"><button id="copy" class="alt">Sao chép link</button><button id="qr" class="alt">Tạo QR</button></div><div class="field"><label>Tải ảnh JPG, PNG, WebP (chọn nhiều ảnh)</label><input id="files" type="file" accept="image/jpeg,image/png,image/webp" multiple></div><div id="uploadMsg" class="status"></div><div id="editPhotos" class="grid"></div></div></div></section><div class="foot">DENBROWN PHOTO SELECTION</div></main>
+<script>
+(()=>{'use strict';
+const URL='https://huxkugikutlwiilnipso.supabase.co',KEY='sb_publishable_y_Zf6lrTKZWmi0l-Xj-S3A_VfRXB0U1';
+const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let db,user,album,photos=[],chosen=new Set(),albums=[];
+let cid=localStorage.getItem('dbps-client')||crypto.randomUUID();localStorage.setItem('dbps-client',cid);
+const slug=location.hash.replace(/^#\/?/,'');
+const msg=(id,s)=>$(id).textContent=s;
+function mode(admin){$('adminView').classList.toggle('hidden',!admin);$('publicView').classList.toggle('hidden',admin);$('adminToggle').textContent=admin?'Ver album':'Quản trị'}
+async function init(){db=supabase.createClient(URL,KEY);try{let {error}=await db.from('denbrown_albums').select('id').limit(1);if(error)throw error;$('conn').textContent='Đã kết nối'}catch(e){$('conn').textContent='Chưa cấu hình DB';console.error(e)}
+let {data:{session}}=await db.auth.getSession();user=session?.user||null;authUI();db.auth.onAuthStateChange((_e,s)=>{user=s?.user||null;authUI()});if(slug)loadPublic(slug)}
+function authUI(){$('login').classList.toggle('hidden',!!user);$('dash').classList.toggle('hidden',!user);$('who').textContent=user?.email||'';if(user)loadAlbums()}
+$('adminToggle').onclick=()=>mode($('adminView').classList.contains('hidden'));
+$('loginBtn').onclick=async()=>{msg('loginMsg','Đang đăng nhập…');let {error}=await db.auth.signInWithPassword({email:$('email').value.trim(),password:$('pass').value});msg('loginMsg',error?.message||'Đăng nhập thành công')};
+$('logout').onclick=()=>db.auth.signOut();
+$('create').onclick=async()=>{let title=$('title').value.trim();if(!title)return msg('createMsg','Vui lòng nhập tên album');let days=Math.min(365,Math.max(1,+$('days').value||30));let {error}=await db.from('denbrown_albums').insert({title,slug:crypto.randomUUID().replaceAll('-','').slice(0,16),note:$('note').value,owner_id:user.id,expires_at:new Date(Date.now()+days*86400000).toISOString()});msg('createMsg',error?.message||'Đã tạo album');if(!error){$('title').value='';$('note').value='';loadAlbums()}};
+async function loadAlbums(){let {data,error}=await db.from('denbrown_albums').select('*').order('created_at',{ascending:false});if(error)return msg('albums',error.message);albums=data||[];$('albums').innerHTML=albums.map(a=>'<div class="album"><div class="grow"><b>'+esc(a.title)+'</b><div class="small muted">Hạn '+new Date(a.expires_at).toLocaleDateString('vi-VN')+' · '+esc(a.status)+'</div><div class="small muted">'+esc(location.origin+location.pathname+'#/'+a.slug)+'</div></div><div class="row"><button class="alt" data-edit="'+a.id+'">Quản lý</button><button class="alt" data-lock="'+a.id+'">'+(a.status==='active'?'Khóa':'Mở')+'</button></div></div>').join('')||'<div class="empty">Chưa có album</div>'}
+$('refresh').onclick=loadAlbums;$('albums').onclick=async e=>{let b=e.target.closest('[data-edit],[data-lock]');if(!b)return;let a=albums.find(x=>x.id===(b.dataset.edit||b.dataset.lock));if(b.dataset.lock){await db.from('denbrown_albums').update({status:a.status==='active'?'locked':'active'}).eq('id',a.id);loadAlbums();return}album=a;$('editor').classList.remove('hidden');$('editTitle').textContent=a.title;loadEditor()};
+async function loadEditor(){let {data,error}=await db.from('denbrown_photos').select('*').eq('album_id',album.id);if(error)return msg('editPhotos',error.message);$('editPhotos').innerHTML=(data||[]).map(p=>'<div class="photo"><img src="'+esc(p.public_url)+'"><div class="meta"><span class="small">'+esc(p.file_name)+'</span><button class="alt" data-del="'+p.id+'">Xóa</button></div></div>').join('')||'<div class="empty">Chưa có ảnh</div>'}
+$('close').onclick=()=>$('editor').classList.add('hidden');$('copy').onclick=()=>navigator.clipboard.writeText(location.origin+location.pathname+'#/'+album.slug).then(()=>alert('Đã sao chép link'));$('qr').onclick=()=>open('https://api.qrserver.com/v1/create-qr-code/?size=320x320&data='+encodeURIComponent(location.origin+location.pathname+'#/'+album.slug),'_blank');
+$('files').onchange=async e=>{for(let f of e.target.files){if(!/^image\/(jpeg|png|webp)$/.test(f.type))continue;let path=album.id+'/'+crypto.randomUUID()+'-'+f.name.replace(/[^\w.-]/g,'_');let {error}=await db.storage.from('denbrown-photos').upload(path,f,{contentType:f.type});if(error){msg('uploadMsg',error.message);continue}let {data:{publicUrl}}=db.storage.from('denbrown-photos').getPublicUrl(path);let ins=await db.from('denbrown_photos').insert({album_id:album.id,file_name:f.name,storage_path:path,public_url:publicUrl});if(ins.error)msg('uploadMsg',ins.error.message)}msg('uploadMsg','Đã tải xong ảnh');e.target.value='';loadEditor()};
+$('editPhotos').onclick=async e=>{let b=e.target.closest('[data-del]');if(!b||!confirm('Xóa ảnh này?'))return;let {data:p}=await db.from('denbrown_photos').select('storage_path').eq('id',b.dataset.del).single();if(p)await db.storage.from('denbrown-photos').remove([p.storage_path]);await db.from('denbrown_photos').delete().eq('id',b.dataset.del);loadEditor()};
+async function loadPublic(s){$('welcome').classList.add('hidden');$('albumPublic').classList.remove('hidden');let {data:a,error}=await db.from('denbrown_albums').select('*').eq('slug',s).maybeSingle();if(error||!a){$('pubTitle').textContent='Không tìm thấy album';return}if(a.status!=='active'||new Date(a.expires_at)<new Date()){$('pubTitle').textContent=a.title;$('expiry').innerHTML='<div class="notice">Album đã hết hạn hoặc bị khóa. Vui lòng liên hệ studio.</div>';return}album=a;$('pubTitle').textContent=a.title;$('pubNote').textContent=a.note||'';$('expiry').innerHTML='<div class="notice">Album có thời hạn đến '+new Date(a.expires_at).toLocaleDateString('vi-VN')+'. Vui lòng chọn ảnh trước thời hạn.</div>';let r=await db.from('denbrown_photos').select('*').eq('album_id',a.id).order('created_at');photos=r.data||[];let sr=await db.from('denbrown_selections').select('photo_id').eq('album_id',a.id).eq('client_id',cid);chosen=new Set((sr.data||[]).map(x=>x.photo_id));renderPublic()}
+function renderPublic(){$('pubPhotos').innerHTML=photos.map(p=>'<div class="photo"><img loading="lazy" src="'+esc(p.public_url)+'"><div class="meta"><span class="small">'+esc(p.file_name)+'</span><button class="heart '+(chosen.has(p.id)?'on':'')+'" data-heart="'+p.id+'">'+(chosen.has(p.id)?'♥':'♡')+'</button></div></div>').join('')||'<div class="empty">Album chưa có ảnh</div>';$('count').textContent=chosen.size+' ảnh đã chọn';$('download').disabled=!chosen.size}
+$('pubPhotos').onclick=async e=>{let b=e.target.closest('[data-heart]');if(!b)return;let id=b.dataset.heart;if(chosen.has(id)){await db.from('denbrown_selections').delete().eq('album_id',album.id).eq('photo_id',id).eq('client_id',cid);chosen.delete(id)}else{let {error}=await db.from('denbrown_selections').upsert({album_id:album.id,photo_id:id,client_id:cid},{onConflict:'album_id,photo_id,client_id'});if(error)return alert(error.message);chosen.add(id)}renderPublic()};
+$('download').onclick=async()=>{let z=new JSZip();$('download').disabled=true;for(let p of photos.filter(x=>chosen.has(x.id))){let r=await fetch(p.public_url);if(r.ok)z.file(p.file_name,await r.blob())}let blob=await z.generateAsync({type:'blob'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='DENBROWN-anh-da-chon.zip';a.click();URL.revokeObjectURL(u);$('download').disabled=false};
+init();
+})();
+</script></body></html>
