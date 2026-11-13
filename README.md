@@ -1,32 +1,30 @@
-# DENBROWN PHOTO SELECTION — V2 Supabase
-Website tĩnh độc lập, giao diện responsive cho điện thoại và máy tính.
+# DENBROWN PHOTO SELECTION — V2
+
+Giao diện mới theo mẫu DENBROWN: nền trắng, tông xanh lá, bố cục tối giản, tương thích điện thoại và máy tính.
+
 ## Tính năng
-- Đăng nhập quản trị bằng Supabase Auth.
+- Quản trị studio đăng nhập bằng Supabase Auth; khách hàng không cần mật khẩu album.
 - Tạo nhiều album, link riêng, thời hạn mặc định 30 ngày, khóa/mở album.
-- Tải ảnh JPG/PNG/WebP lên Supabase Storage.
-- Khách mở link riêng, xem ảnh, thả tim; lựa chọn được lưu trong Supabase theo trình duyệt khách.
-- Tải ảnh đã chọn thành ZIP; tạo QR cho link album.
-## Cài đặt bắt buộc
-1. Mở Supabase project đã cấu hình trong index.html.
-2. Chạy toàn bộ file `supabase-setup.sql` trong SQL Editor.
-3. Trong Authentication > Users, tạo tài khoản quản trị.
-4. Không bao giờ đưa service_role/secret key lên website; index chỉ dùng publishable key.
-5. Mở website sau khi deploy HTTPS, đăng nhập quản trị, tạo album và thử bằng cửa sổ riêng tư.
+- Tải nhiều ảnh JPG/PNG/WebP lên Supabase Storage.
+- Giữ nguyên tên file gốc khi tải ảnh từ thiết bị lên.
+- Khách mở link album riêng, xem ảnh, phóng to ảnh, thả tim và lưu lựa chọn.
+- Tải các ảnh đã chọn thành ZIP; tạo QR cho link album.
+- Tùy chọn cho phép tải ảnh gốc, ghi chú và giới hạn số ảnh chọn.
+- Đọc ảnh từ link thư mục Google Drive công khai không cần Google API. Việc đọc phụ thuộc cách Drive hiển thị thư mục; một số thư mục có thể bị Google giới hạn. Tên file được giữ theo dữ liệu tên gốc mà Drive cung cấp.
+
+## Cài đặt Supabase
+1. Mở dự án Supabase đã cấu hình trong `index.html`.
+2. Chạy toàn bộ `supabase-setup.sql` trong SQL Editor.
+3. Trong Authentication → Users, tạo tài khoản quản trị.
+4. Chỉ dùng publishable key trên trình duyệt; tuyệt đối không đưa service_role/secret key vào website.
+5. Triển khai website qua HTTPS, đăng nhập quản trị, tạo album và thử bằng cửa sổ riêng tư.
+
 ## Deploy
-Repository này có thể triển khai trên Vercel (Other/static, output directory `.`) hoặc GitHub Pages. Commit mới sẽ cập nhật source; việc đổi URL domain hiện tại cần cấu hình hosting/DNS riêng.
+Repository triển khai qua GitHub Pages. Mỗi commit trên nhánh `main` sẽ kích hoạt workflow Pages nếu GitHub Pages đã bật nguồn **GitHub Actions** trong Settings → Pages.
+
 ## Lưu ý
-Album hết hạn sẽ bị ẩn với khách nhưng dữ liệu ảnh vẫn được giữ lại, không tự xóa để tránh mất dữ liệu. Google Drive URL/API chưa tích hợp trong bản này. Cần kiểm thử với Supabase trước khi dùng cho khách thật.
-
-
-## Nâng cấp tính năng album
-- Giới hạn số ảnh khách được chọn: giới hạn kiểm tra ở giao diện và trigger PostgreSQL.
-- Ghi chú khách hàng: khách gửi ghi chú; quản trị xem ghi chú trong màn hình quản lý album.
-- Cho phép/tắt tải ảnh gốc.
-- Lịch sử quản trị: danh sách album, trạng thái khóa/mở và ngày hết hạn; link/QR riêng từng album.
-- Không yêu cầu mật khẩu album; khách mở trực tiếp bằng link riêng.
-- Không sử dụng Google Drive API; studio tải ảnh trực tiếp lên website.
-## Cập nhật cơ sở dữ liệu sau nâng cấp
-Chạy lại toàn bộ `supabase-setup.sql` trong Supabase SQL Editor để thêm các cột, bảng ghi chú, trigger giới hạn ảnh. Không cần xóa dữ liệu album hiện tại.
-
-
-**Lưu ý:** Album không có mật khẩu. Không dùng Google Drive API; tải ảnh trực tiếp lên album. Sau khi cập nhật, chạy lại `supabase-setup.sql` để gỡ cấu hình mật khẩu cũ.
+- Album khách không có mật khẩu; link riêng là cách truy cập album.
+- Mật khẩu đăng nhập chỉ dành cho khu vực quản trị studio.
+- Album hết hạn sẽ bị ẩn với khách nhưng ảnh vẫn được giữ trong Storage, không tự xóa.
+- Google Drive không dùng API key. Nếu Google chặn việc đọc thư mục, hãy tải ảnh gốc trực tiếp lên album.
+- Cần kiểm thử trên dự án Supabase thật trước khi gửi link cho khách hàng.
