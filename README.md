@@ -19,11 +19,14 @@ Album hết hạn sẽ bị ẩn với khách nhưng dữ liệu ảnh vẫn đ�
 
 
 ## Nâng cấp tính năng album
-- Mật khẩu riêng cho album: mật khẩu được băm SHA-256 ở trình duyệt và xác minh qua RPC `get_public_album`.
 - Giới hạn số ảnh khách được chọn: giới hạn kiểm tra ở giao diện và trigger PostgreSQL.
 - Ghi chú khách hàng: khách gửi ghi chú; quản trị xem ghi chú trong màn hình quản lý album.
 - Cho phép/tắt tải ảnh gốc.
 - Lịch sử quản trị: danh sách album, trạng thái khóa/mở và ngày hết hạn; link/QR riêng từng album.
-- Google Drive: nhập link thư mục công khai và API key; bật Google Drive API trong Google Cloud để đọc danh sách ảnh. Tính năng này cần API key hợp lệ và quyền xem công khai của thư mục.
+- Không yêu cầu mật khẩu album; khách mở trực tiếp bằng link riêng.
+- Không sử dụng Google Drive API; studio tải ảnh trực tiếp lên website.
 ## Cập nhật cơ sở dữ liệu sau nâng cấp
-Chạy lại toàn bộ `supabase-setup.sql` trong Supabase SQL Editor để thêm các cột, bảng ghi chú, hàm xác minh mật khẩu và trigger giới hạn ảnh. Không cần xóa dữ liệu album hiện tại.
+Chạy lại toàn bộ `supabase-setup.sql` trong Supabase SQL Editor để thêm các cột, bảng ghi chú, trigger giới hạn ảnh. Không cần xóa dữ liệu album hiện tại.
+
+
+**Lưu ý:** Album không có mật khẩu. Không dùng Google Drive API; tải ảnh trực tiếp lên album. Sau khi cập nhật, chạy lại `supabase-setup.sql` để gỡ cấu hình mật khẩu cũ.
