@@ -76,3 +76,6 @@ alter table public.denbrown_albums drop column if exists password_hash;
 alter table public.denbrown_albums drop column if exists drive_folder_url;
 create policy "album public read" on public.denbrown_albums for select to anon,authenticated
  using ((status='active' and expires_at>now()) or owner_id=auth.uid());
+
+-- Refresh Supabase REST schema cache after adding/removing columns.
+NOTIFY pgrst, 'reload schema';
